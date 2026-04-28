@@ -1,26 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-vi.mock('three', () => {
-  class MockGroup {
-    visible: boolean = true;
-    children: unknown[] = [];
-    add(_o: unknown): void {}
-    traverse(_fn: (o: unknown) => void): void {}
-  }
-  class MockScene {
-    add(_o: unknown): void {}
-  }
-  class MockCamera {
-    position = { x: 0, y: 0, z: 50, set: () => {} };
-    aspect: number = 1;
-    updateProjectionMatrix(): void {}
-    lookAt(): void {}
-  }
-  class MockClock {
-    getDelta(): number {
-      return 0.016;
-    }
-  }
+vi.mock('three', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('three')>();
   class MockRenderer {
     setSize(): void {}
     setPixelRatio(): void {}
@@ -28,22 +9,28 @@ vi.mock('three', () => {
     dispose(): void {}
   }
   return {
-    Group: MockGroup,
-    Scene: MockScene,
-    PerspectiveCamera: MockCamera,
-    Clock: MockClock,
-    WebGLRenderer: MockRenderer,
-    Color: class {
-      constructor(_c: string) {}
-    },
-    BoxGeometry: class {},
-    Mesh: class {
-      position = { set: () => {} };
-    },
-    MeshStandardMaterial: class {},
-    AmbientLight: class {}
+    ...actual,
+    WebGLRenderer: MockRenderer
   };
 });
+
+vi.mock('gsap/ScrollSmoother', () => ({
+  ScrollSmoother: { create: () => ({ kill: () => {} }) }
+}));
+
+vi.mock('gsap/ScrollTrigger', () => ({
+  ScrollTrigger: {
+    create: () => ({}),
+    getAll: () => []
+  }
+}));
+
+vi.mock('howler', () => ({
+  Howl: class {
+    play() {}
+    pause() {}
+  }
+}));
 
 import { Engine } from '@/core/Engine';
 

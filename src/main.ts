@@ -1,10 +1,10 @@
-import { Engine } from '@/core/Engine';
 import { isMobile } from '@/core/Mobile';
+import { isReducedMotion } from '@/core/Reduced';
 
-if (isMobile()) {
-  // F8: aqui ele vai redirect pra main-mobile
-  console.log('mobile detected — versão simplificada será carregada na F8');
+if (isMobile() || isReducedMotion()) {
+  await import('@/main-mobile');
+} else {
+  const { Engine } = await import('@/core/Engine');
+  const engine = new Engine();
+  engine.start();
 }
-
-const engine = new Engine();
-engine.start();
