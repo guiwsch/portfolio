@@ -51,6 +51,12 @@ export class StackRoom extends BaseScene {
     this.group.add(this.iconGroup);
   }
 
+  enter(): void {
+    super.enter();
+    this.ctx.camera.position.set(0, 0, 8);
+    this.ctx.camera.lookAt(0, 0, 0);
+  }
+
   update(delta: number): void {
     this.iconGroup.rotation.z += delta * 0.05;
     this.icons.forEach((icon, idx) => {

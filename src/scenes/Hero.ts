@@ -44,6 +44,20 @@ export class Hero extends BaseScene {
     this.ctx.camera.lookAt(0, 0, 0);
   }
 
+  enter(): void {
+    super.enter();
+    this.ctx.camera.position.set(0, 0, 80);
+    this.ctx.camera.lookAt(0, 0, 0);
+    const heroTitle = document.querySelector('.hero-title') as HTMLElement | null;
+    if (heroTitle) heroTitle.style.opacity = '1';
+  }
+
+  exit(): void {
+    super.exit();
+    const heroTitle = document.querySelector('.hero-title') as HTMLElement | null;
+    if (heroTitle) heroTitle.style.opacity = '0';
+  }
+
   private createStars(count: number): Points {
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {

@@ -26,6 +26,9 @@ export class Engine {
   scrollFlow!: ScrollFlow;
   modal!: Modal;
   audio: Audio;
+  private heroTitle!: HeroTitle;
+  private bio!: BioOverlay;
+  private contactOverlay!: ContactOverlay;
   private rafId: number | null = null;
   private raycaster = new Raycaster();
   private pointer = new Vector2();
@@ -67,9 +70,9 @@ export class Engine {
     const uiRoot = document.getElementById('ui-root');
     if (!uiRoot) throw new Error('ui-root element not found');
 
-    const heroTitle = new HeroTitle(uiRoot);
-    const bio = new BioOverlay(uiRoot);
-    const contactOverlay = new ContactOverlay(uiRoot);
+    this.heroTitle = new HeroTitle(uiRoot);
+    this.bio = new BioOverlay(uiRoot);
+    this.contactOverlay = new ContactOverlay(uiRoot);
     this.modal = new Modal(uiRoot);
 
     this.audio.loadMusic('/audio/ambient.mp3');
@@ -85,35 +88,41 @@ export class Engine {
     new SkipIntro(uiRoot);
 
     this.scrollFlow = new ScrollFlow(this.renderer.camera);
-    this.scrollFlow.setupHero();
-    this.scrollFlow.setupAbout(
-      () => {
-        this.goToScene(1);
-        bio.show();
-      },
-      () => {
+    this.scrollFlow.setupHero({
+      onEnter: () => {
         this.goToScene(0);
-        bio.hide();
-      }
-    );
-    this.scrollFlow.setupMuseum(
-      () => this.goToScene(2),
-      () => this.goToScene(1)
-    );
-    this.scrollFlow.setupStack(
-      () => this.goToScene(3),
-      () => this.goToScene(2)
-    );
-    this.scrollFlow.setupContact(
-      () => {
-        this.goToScene(4);
-        contactOverlay.show();
+        this.heroTitle.fadeIn();
       },
-      () => {
-        this.goToScene(3);
-        contactOverlay.hide();
+      onLeave: () => {
+        this.heroTitle.fadeOut();
       }
-    );
+    });
+    this.scrollFlow.setupAbout({
+      onEnter: () => {
+        this.goToScene(1);
+        this.bio.show();
+      },
+      onLeave: () => {
+        this.bio.hide();
+      }
+    });
+    this.scrollFlow.setupMuseum({
+      onEnter: () => this.goToScene(2),
+      onLeave: () => {}
+    });
+    this.scrollFlow.setupStack({
+      onEnter: () => this.goToScene(3),
+      onLeave: () => {}
+    });
+    this.scrollFlow.setupContact({
+      onEnter: () => {
+        this.goToScene(4);
+        this.contactOverlay.show();
+      },
+      onLeave: () => {
+        this.contactOverlay.hide();
+      }
+    });
 
     this.setupTableHover();
     this.setupTableClicks();
@@ -121,7 +130,7 @@ export class Engine {
 
     setTimeout(() => {
       loader.hide();
-      heroTitle.animateIn();
+      this.heroTitle.animateIn();
     }, 300);
 
     this.tick();

@@ -64,13 +64,19 @@ export class Museum extends BaseScene {
 
     this.group.add(new AmbientLight(0x202030, 0.2));
 
-    const orion = new OrionTable(0);
-    const lumi = new LumiTable(-20);
-    const huge = new HugeTable(-40);
+    const orion = new OrionTable(-5);
+    const lumi = new LumiTable(-25);
+    const huge = new HugeTable(-45);
     this.tables = [orion, lumi, huge];
     this.tables.forEach((t) => this.group.add(t.group));
 
     await Promise.all(this.tables.map((t) => t.initHologram()));
+  }
+
+  enter(): void {
+    super.enter();
+    this.ctx.camera.position.set(0, 2, 18);
+    this.ctx.camera.lookAt(0, 2, 0);
   }
 
   private createGridTexture(): CanvasTexture {

@@ -4,6 +4,11 @@ import { PerspectiveCamera } from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
+export type SectionCallbacks = {
+  onEnter: () => void;
+  onLeave: () => void;
+};
+
 export class ScrollFlow {
   private camera: PerspectiveCamera;
 
@@ -11,12 +16,16 @@ export class ScrollFlow {
     this.camera = camera;
   }
 
-  setupHero(): void {
+  setupHero(cb: SectionCallbacks): void {
     ScrollTrigger.create({
       trigger: '#scroll-hero',
       start: 'top top',
       end: 'bottom top',
       scrub: 1,
+      onEnter: cb.onEnter,
+      onEnterBack: cb.onEnter,
+      onLeave: cb.onLeave,
+      onLeaveBack: cb.onLeave,
       onUpdate: (self) => {
         const t = self.progress;
         this.camera.position.z = 80 - t * 68;
@@ -24,59 +33,57 @@ export class ScrollFlow {
     });
   }
 
-  setupAbout(onEnter: () => void, onExit: () => void): void {
+  setupAbout(cb: SectionCallbacks): void {
     ScrollTrigger.create({
       trigger: '#scroll-about',
       start: 'top center',
       end: 'bottom center',
-      onEnter,
-      onLeaveBack: onExit
+      onEnter: cb.onEnter,
+      onEnterBack: cb.onEnter,
+      onLeave: cb.onLeave,
+      onLeaveBack: cb.onLeave
     });
   }
 
-  setupMuseum(onEnter: () => void, onExit: () => void): void {
+  setupMuseum(cb: SectionCallbacks): void {
     ScrollTrigger.create({
       trigger: '#scroll-museum',
       start: 'top center',
       end: 'bottom center',
-      onEnter,
-      onLeaveBack: onExit,
       scrub: 1.5,
+      onEnter: cb.onEnter,
+      onEnterBack: cb.onEnter,
+      onLeave: cb.onLeave,
+      onLeaveBack: cb.onLeave,
       onUpdate: (self) => {
         const t = self.progress;
-        this.camera.position.set(0, 1, 20 - t * 80);
-        this.camera.lookAt(0, 1, this.camera.position.z - 10);
+        this.camera.position.set(2.5, 2, 18 - t * 65);
+        this.camera.lookAt(0, 2, this.camera.position.z - 8);
       }
     });
   }
 
-  setupStack(onEnter: () => void, onExit: () => void): void {
+  setupStack(cb: SectionCallbacks): void {
     ScrollTrigger.create({
       trigger: '#scroll-stack',
       start: 'top center',
       end: 'bottom center',
-      onEnter,
-      onLeaveBack: onExit,
-      onUpdate: (self) => {
-        const t = self.progress;
-        this.camera.position.set(0, 0, 8 - t * 2);
-        this.camera.lookAt(0, 0, 0);
-      }
+      onEnter: cb.onEnter,
+      onEnterBack: cb.onEnter,
+      onLeave: cb.onLeave,
+      onLeaveBack: cb.onLeave
     });
   }
 
-  setupContact(onEnter: () => void, onExit: () => void): void {
+  setupContact(cb: SectionCallbacks): void {
     ScrollTrigger.create({
       trigger: '#scroll-contact',
       start: 'top center',
       end: 'bottom center',
-      onEnter,
-      onLeaveBack: onExit,
-      onUpdate: (self) => {
-        const t = self.progress;
-        this.camera.position.set(0, 5 + t * 5, 30 - t * 10);
-        this.camera.lookAt(0, 0, 0);
-      }
+      onEnter: cb.onEnter,
+      onEnterBack: cb.onEnter,
+      onLeave: cb.onLeave,
+      onLeaveBack: cb.onLeave
     });
   }
 

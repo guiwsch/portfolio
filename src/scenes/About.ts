@@ -20,9 +20,9 @@ export class About extends BaseScene {
   async init(): Promise<void> {
     const geom = new IcosahedronGeometry(2, 1);
     const mat = new MeshStandardMaterial({
-      color: new Color('#1a2030'),
-      metalness: 0.3,
-      roughness: 0.8,
+      color: new Color('#3a4868'),
+      metalness: 0.4,
+      roughness: 0.5,
       flatShading: true
     });
     this.avatar = new Mesh(geom, mat);
@@ -30,13 +30,24 @@ export class About extends BaseScene {
     this.avatar.scale.set(1, 1.6, 1);
     this.group.add(this.avatar);
 
-    const light = new PointLight(0x4a6aff, 4, 30);
-    light.position.set(-5, 5, 5);
+    const light = new PointLight(0x6a8aff, 12, 40);
+    light.position.set(-3, 3, 6);
     this.group.add(light);
-    this.group.add(new AmbientLight(0x101020, 0.4));
+
+    const fillLight = new PointLight(0xff8866, 6, 30);
+    fillLight.position.set(-6, -2, 3);
+    this.group.add(fillLight);
+
+    this.group.add(new AmbientLight(0x202840, 0.6));
 
     this.dust = this.createDust(300);
     this.group.add(this.dust);
+  }
+
+  enter(): void {
+    super.enter();
+    this.ctx.camera.position.set(-1, 0, 7);
+    this.ctx.camera.lookAt(-3, 0, 0);
   }
 
   private createDust(count: number): Points {
