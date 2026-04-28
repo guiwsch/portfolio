@@ -1,22 +1,14 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { PerspectiveCamera } from 'three';
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger);
 
 export class ScrollFlow {
-  private smoother: ScrollSmoother;
   private camera: PerspectiveCamera;
 
   constructor(camera: PerspectiveCamera) {
     this.camera = camera;
-    this.smoother = ScrollSmoother.create({
-      wrapper: '#smooth-wrapper',
-      content: '#smooth-content',
-      smooth: 1.2,
-      effects: false
-    });
   }
 
   setupHero(): void {
@@ -89,7 +81,6 @@ export class ScrollFlow {
   }
 
   destroy(): void {
-    this.smoother.kill();
     ScrollTrigger.getAll().forEach((t) => t.kill());
   }
 }
