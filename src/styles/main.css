@@ -82,18 +82,6 @@
   transition: width 0.2s ease-out;
 }
 
-#smooth-wrapper {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-#smooth-content {
-  pointer-events: none;
-}
-
 .scroll-section {
   height: 100vh;
   width: 100%;
