@@ -58,6 +58,12 @@ export class Contact extends BaseScene {
     this.group.add(this.starsField);
   }
 
+  enter(): void {
+    super.enter();
+    this.ctx.camera.position.set(0, 5, 25);
+    this.ctx.camera.lookAt(0, 0, 0);
+  }
+
   update(delta: number): void {
     this.material.uniforms.uTime.value += delta;
     this.planet.rotation.y += delta * 0.03;

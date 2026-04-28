@@ -60,7 +60,7 @@ export class BaseTable {
   }
 
   private buildOrb(): void {
-    const geom = new SphereGeometry(0.7, 64, 64);
+    const geom = new SphereGeometry(0.5, 64, 64);
     this.orbMaterial = new ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
@@ -95,8 +95,8 @@ export class BaseTable {
       transparent: true,
       depthWrite: false
     });
-    const plane = new Mesh(new PlaneGeometry(2.4, 2.4), this.holoMaterial);
-    plane.position.set(0, 1.2, -1.4);
+    const plane = new Mesh(new PlaneGeometry(1.6, 1.6), this.holoMaterial);
+    plane.position.set(0, 1.4, -1.2);
     this.group.add(plane);
   }
 
